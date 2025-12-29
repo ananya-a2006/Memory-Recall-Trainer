@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Memory Recall Trainer</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        width: 320px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    #words {
+        font-size: 20px;
+        margin: 15px 0;
+        color: #333;
+    }
+
+    textarea {
+        width: 100%;
+        height: 70px;
+        margin-top: 10px;
+        display: none;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px 15px;
+        border: none;
+        background: #4CAF50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #result {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>🧠 Memory Recall Trainer</h2>
+
+    <div id="words"></div>
+
+    <textarea id="answer" placeholder="Type remembered words..."></textarea>
+
+    <button onclick="startGame()">Start</button>
+    <button onclick="checkAnswer()" style="display:none" id="submitBtn">Submit</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    const allWords = [
+        "apple","dream","sky","train","house",
+        "bag","tree","mud","red","dance",
+        "umbrella","water","light","river","stone"
+    ];
+
+    let selectedWords = [];
+
+    function startGame() {
+        document.getElementById("result").innerText = "";
+        selectedWords = [];
+
+        while (selectedWords.length < 5) {
+            let word = allWords[Math.floor(Math.random() * allWords.length)];
+            if (!selectedWords.includes(word)) {
+                selectedWords.push(word);
+            }
+        }
+
+        document.getElementById("words").innerText = selectedWords.join("  ");
+        document.getElementById("answer").style.display = "none";
+        document.getElementById("submitBtn").style.display = "none";
+
+        setTimeout(() => {
+            document.getElementById("words").innerText = "Words hidden! Recall now.";
+            document.getElementById("answer").style.display = "block";
+            document.getElementById("submitBtn").style.display = "inline-block";
+        }, 10000);
+    }
+
+    function checkAnswer() {
+        const userInput = document.getElementById("answer").value.toLowerCase();
+        const userWords = userInput.split(/\s+/);
+
+        let score = 0;
+        selectedWords.forEach(word => {
+            if (userWords.includes(word)) {
+                score++;
+            }
+        });
+
+        document.getElementById("result").innerText =
+            `You remembered ${score} out of 5 words`;
+
+        document.getElementById("answer").value = "";
+    }
+</script>
+
+</body>
+</html>
